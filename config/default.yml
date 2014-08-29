@@ -1,0 +1,2 @@
+mongodb:
+  connString: mongodb://user:password@ds033170.mongolab.com:33170/gigalot_dev
