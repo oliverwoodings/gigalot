@@ -1,12 +1,20 @@
-var restful = require("node-restful");
-var mongoose = restful.mongoose;
-var SchemaTypes = mongoose.SchemaTypes;
+var DataTypes = require("sequelize");
+var sequelize = require("./sequelize");
 
-var Instrument = restful.model("Instrument", new mongoose.Schema({
-  name: { type: String, required: true, unique: true },
-  instrumentParts: [{ type: SchemaTypes.ObjectId, ref: "InstrumentPart" }]
-}));
+var InstrumentPart = require("./instrument-part");
 
-Instrument.methods(["get", "post", "put"]);
+var Instrument = sequelize.define("Instrument", {
+  name: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  icon: {
+    type: DataTypes.STRING,
+    allowNull: true
+  }
+});
+
+Instrument.hasMany(InstrumentPart, { as: "InstrumentParts", constraints: false });
+InstrumentPart.hasOne(Instrument);
 
 module.exports = Instrument;

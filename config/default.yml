@@ -1,2 +1,7 @@
-mongodb:
-  connString: mongodb://user:password@ds033170.mongolab.com:33170/gigalot_dev
+db:
+  host: localhost
+  port: 3306
+  database: gigalot
+  username: root
+  password:
+  logging: false

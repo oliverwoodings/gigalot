@@ -1,16 +1,20 @@
-var restful = require("node-restful");
-var mongoose = restful.mongoose;
-var SchemaTypes = mongoose.SchemaTypes;
+var DataTypes = require("sequelize");
+var sequelize = require("./sequelize");
 
-var Member = restful.model("Member", new mongoose.Schema({
-  name: {
-    first: { type: String, required: true },
-    last: { type: String, require: true },
-  },
-  email: { type: string, required: true, unique: true },
-  password: { type: string, required: true }
-}));
+var User = require("./user");
+var InstrumentPart = require("./instrument-part");
 
-Member.methods(["get", "post", "put"]);
+var Member = sequelize.define("Member", {
+  isAdmin: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false
+  }
+});
+
+Member.hasOne(User);
+User.hasMany(Member, { as: "Memberships", constraints: false });
+
+Member.hasMany(InstrumentPart, { as: "InstrumentParts", constraints: false });
+InstrumentPart.hasMany(Member, { as: "Players", constraints: false });
 
 module.exports = Member;

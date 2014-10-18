@@ -1,20 +1,32 @@
-var restful = require("node-restful");
-var mongoose = restful.mongoose;
-var SchemaTypes = mongoose.SchemaTypes;
+var DataTypes = require("sequelize");
+var sequelize = require("./sequelize");
 
-var Band = restful.model("Band", new mongoose.Schema({
-  name: { type: String, unique: true, required: true },
-  members: [{
-    admin: Boolean,
-    instruments: [{ type: SchemaTypes.ObjectId, ref: "Instrument" }],
-    member: { type: SchemaTypes.ObjectId, ref: "Member" }
-  }],
-  scores: [{ type: SchemaTypes.ObjectId, ref: "Score" }],
-  contacts: [{ type: SchemaTypes.ObjectId, ref: "Contact" }],
-  instruments: [{ type: SchemaTypes.ObjectId, ref: "Instrument" }],
-  gigs: [{ type: SchemaTypes.ObjectId, ref: "Gig" }]
-}));
+var Member     = require("./member");
+var Instrument = require("./instrument");
+var Score      = require("./score");
+var Setlist    = require("./setlist");
+var Contact    = require("./contact");
+var Gig        = require("./gig");
 
-Band.methods(["get", "post", "put"]);
+var Band = sequelize.define("Band", {
+  name: {
+    type: DataTypes.STRING,
+    allowNull: false
+  }
+});
+
+Band.hasMany(Instrument, { as: "Instruments" });
+
+Band.hasMany(Member, { as: "Member", constraints: false });
+Member.hasOne(Band);
+
+Band.hasMany(Score, { as: "Scores" });
+
+Band.hasMany(Setlist, { as: "SetlistTemplates" });
+
+Band.hasMany(Gig, { as: "Gigs", constraints: false });
+Gig.hasOne(Band);
+
+Band.hasMany(Contact, { as: "Contacts" });
 
 module.exports = Band;
