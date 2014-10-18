@@ -8,6 +8,10 @@ var Member = sequelize.define("Member", {
   isAdmin: {
     type: DataTypes.BOOLEAN,
     defaultValue: false
+  },
+  deleted: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: true
   }
 });
 
